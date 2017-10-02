@@ -16,6 +16,8 @@
 
 #ifdef LIBXML_READER_ENABLED
 
+#include "reader2.h"
+
 /**
  * processNode:
  * @reader: the xmlReader
@@ -76,6 +78,9 @@ streamFile(const char *filename) {
 }
 
 int main(int argc, char **argv) {
+
+    foo();
+
     if (argc != 2)
         return(1);
 

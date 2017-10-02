@@ -2,18 +2,21 @@
 
 all : reader1 test1
 
-reader_objects = reader1.o
+reader1_objects = reader1.o reader2.o
 
 test1_objects = test1.o
 
-CPPFLAGS += -I/usr/local/include/libxml2
-LDFLAGS += -L/usr/local/lib -lxml2 -lm -ldl
+LIBXML_INCL = `xml2-config --cflags`
+LIBXML_LDFLAGS = `xml2-config --libs`
 
-reader1 : $(reader_objects)
-	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
+$(reader1_objects) : %.o : %.c
+	$(CC) -c $(CFLAGS) $(LIBXML_INCL) $< -o $@
+
+reader1 : $(reader1_objects)
+	$(CC) $^ $(LIBXML_LDFLAGS) -o $@
 
 test1 : $(test1_objects)
-	$(CXX) $(CFLAGS) $< -o $@ $(LDFLAGS)
+	$(CXX) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
-	rm reader1 $(reader_objects) test1 $(test1_objects)
+	rm -f reader1 $(reader1_objects) test1 $(test1_objects)
